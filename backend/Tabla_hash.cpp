@@ -1,9 +1,5 @@
 #include <iostream>
 #include <unordered_map>
-#include <cppconn/driver.h>
-#include <cppconn/connection.h>
-#include <cppconn/statement.h>
-#include <cppconn/resultset.h>
 
 using namespace std;
 
@@ -16,33 +12,6 @@ struct Paciente {
 
 unordered_map<int, Paciente> tablaHashPorID;
 unordered_map<string, Paciente> tablaHashPorNombre;
-
-void cargarPacientesDesdeBD() {
-    try {
-        sql::Driver* driver = get_driver_instance();
-        unique_ptr<sql::Connection> conn(driver->connect("tcp://127.0.0.1:3306", "root", "tu_contraseña"));
-        conn->setSchema("hospital");
-
-        unique_ptr<sql::Statement> stmt(conn->createStatement());
-        unique_ptr<sql::ResultSet> res(stmt->executeQuery("SELECT * FROM pacientes"));
-
-        while (res->next()) {
-            Paciente p;
-            p.id = res->getInt("id");
-            p.nombre = res->getString("nombre");
-            p.edad = res->getInt("edad");
-            p.diagnostico = res->getString("diagnostico");
-
-            tablaHashPorID[p.id] = p;
-            tablaHashPorNombre[p.nombre] = p;
-        }
-
-        cout << "Pacientes cargados correctamente.\n";
-
-    } catch (sql::SQLException &e) {
-        cerr << "Error al conectar a MySQL: " << e.what() << endl;
-    }
-}
 
 void buscarPorID(int id) {
     if (tablaHashPorID.find(id) != tablaHashPorID.end()) {
@@ -63,7 +32,6 @@ void buscarPorNombre(const string& nombre) {
 }
 
 int main() {
-    cargarPacientesDesdeBD();
 
     int opcion;
     while (true) {

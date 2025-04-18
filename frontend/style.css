@@ -1,117 +1,183 @@
-body {
+/* General Reset */
+* {
+  box-sizing: border-box;
   margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(to bottom, #1D837F, #9FD8E1);
-  color: #1D837F;
+  color: #004d40;
 }
 
-.navbar {
+/* Contenedor principal centrado */
+.container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  padding: 15px 30px;
-  background-color: #e0f7fa;
+  height: 90vh;
 }
 
+/* Sección del contenido principal */
+.main-content {
+  display: flex;
+  gap: 40px;
+  width: 1000px;
+  justify-content: space-between;
+}
+
+/* Tarjeta de login */
+.login-card {
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #004d40;
+  padding: 30px;
+  border-radius: 25px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.login-card label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.login-card input {
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #cce5e2;
+  color: #004d40;
+  font-size: 14px;
+}
+
+.login-btn {
+  background-color: #00695c;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #004d40;
+}
+
+/* Enlaces debajo del login */
+.links {
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 5px;
+  gap: 6px;
+}
+
+.links a {
+  color: #00796b;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+/* Tarjetas del panel derecho */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 180px);
+  grid-template-rows: repeat(2, 120px);
+  gap: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
+  padding: 20px;
+  border-radius: 25px;
+}
+
+.card {
+  background-color: #e0f7fa;
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-weight: bold;
+  font-size: 16px;
+  color: #004d40;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.card i {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.card.empty {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Encabezado / Navbar */
 .logo {
   display: flex;
   align-items: center;
   gap: 10px;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 24px;
+  color: #004d40;
+  padding: 15px 30px;
+  background-color: #d7f5f7;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo i {
+  color: #004d40;
+  font-size: 22px;
 }
 
 .search-section {
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 15px 30px;
+  background-color: #d7f5f7;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .search-section input {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: none;
-  border-radius: 10px;
+  border-radius: 20px;
+  outline: none;
+  background-color: #ffffff;
+  color: #004d40;
+  width: 200px;
 }
 
-.main-content {
-    display: flex;
-    gap: 20px;
-    padding: 40px;
-  }
-  
-  .login-card {
-    background-color: #e0f2f1;
-    padding: 20px;
-    border-radius: 15px;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .login-card input {
-    padding: 8px;
-    border: none;
-    border-radius: 8px;
-  }
-  
-  .login-btn {
-    background-color: #00695c;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .login-btn:hover {
-    background-color: #004d40;
-  }
-  
-  .links {
-    font-size: 12px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-  }
-  
-  .links a {
-    color: #00796b;
-    text-decoration: none;
+.search-section i {
+  font-size: 18px;
+  color: #004d40;
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(2, 160px);
-  gap: 20px;
+/* Icono de perfil */
+.search-section::after {
+  content: "\f2bd";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-left: auto;
+  font-size: 20px;
+  color: #004d40;
+  background-color: #cce5e2;
+  border-radius: 50%;
+  padding: 10px;
 }
-
-.card {
-  background: linear-gradient(to bottom right, #e0f2f1, #b2dfdb);
-  border-radius: 15px;
-  width: 160px;
-  height: 100px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-}
-
-.card i {
-  font-size: 24px;
-}
-
-.card.empty {
-  opacity: 0.3;
-  pointer-events: none;
-}
-  

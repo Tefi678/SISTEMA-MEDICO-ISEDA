@@ -1,5 +1,7 @@
 #include <iostream>
 #include <unordered_map>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -12,6 +14,30 @@ struct Paciente {
 
 unordered_map<int, Paciente> tablaHashPorID;
 unordered_map<string, Paciente> tablaHashPorNombre;
+
+void cargarDesdeArchivo(const string& nombreArchivo) {
+    ifstream archivo(nombreArchivo);
+    string linea;
+
+    while (getline(archivo, linea)) {
+        stringstream ss(linea);
+        string item;
+        Paciente p;
+
+        getline(ss, item, ',');
+        p.id = stoi(item);
+        getline(ss, p.nombre, ',');
+        getline(ss, item, ',');
+        p.edad = stoi(item);
+        getline(ss, p.diagnostico, ',');
+
+        tablaHashPorID[p.id] = p;
+        tablaHashPorNombre[p.nombre] = p;
+    }
+
+    archivo.close();
+    cout << "Datos cargados desde archivo correctamente.\n";
+}
 
 void buscarPorID(int id) {
     if (tablaHashPorID.find(id) != tablaHashPorID.end()) {
@@ -32,6 +58,7 @@ void buscarPorNombre(const string& nombre) {
 }
 
 int main() {
+    cargarDesdeArchivo("pacientes.csv");
 
     int opcion;
     while (true) {

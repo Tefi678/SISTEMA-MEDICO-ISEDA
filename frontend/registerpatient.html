@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <title>Registrar Paciente</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #1D837F, #9FD8E1);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      max-width: 500px;
+      background: white;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      background-color: #d7f5f7;
+      color: #004d40;
+      font-weight: bold;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3 class="text-center text-success mb-4">Registrar Paciente</h3>
+
+    <form id="pacienteForm">
+      <div class="form-group">
+        <label>Nombre Completo</label>
+        <input type="text" class="form-control" id="nombre" required>
+      </div>
+      <div class="form-group">
+        <label>DNI</label>
+        <input type="text" class="form-control" id="dni" required>
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input type="text" class="form-control" id="telefono" required>
+      </div>
+      <div class="form-group">
+        <label>Dirección</label>
+        <input type="text" class="form-control" id="direccion">
+      </div>
+      <button type="submit" class="btn btn-success btn-block">Guardar</button>
+    </form>
+  </div>
+
+  <footer>
+    © 2025 Centro Médico ISEDA — Todos los derechos reservados.
+  </footer>
+
+  <script>
+    document.getElementById("pacienteForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+  
+      const paciente = {
+        nombre: document.getElementById("nombre").value,
+        dni: document.getElementById("dni").value,
+        telefono: document.getElementById("telefono").value,
+        direccion: document.getElementById("direccion").value
+      };
+  
+      let pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
+      pacientes.push(paciente);
+      localStorage.setItem("pacientes", JSON.stringify(pacientes));
+  
+      alert("Paciente registrado correctamente.");
+      window.location.href = "registerpatient.html";
+    });
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <title>Pacientes Registrados</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #1D837F, #9FD8E1);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 30px;
+    }
+    .container {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    h3 {
+      color: #1D837F;
+    }
+    table {
+      margin-top: 20px;
+    }
+    footer {
+      margin-top: 30px;
+      text-align: center;
+      background-color: #d7f5f7;
+      color: #004d40;
+      font-weight: bold;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3 class="text-center">Lista de Pacientes</h3>
+    <table class="table table-bordered table-hover mt-4">
+      <thead class="thead-light">
+        <tr>
+          <th>Nombre</th>
+          <th>DNI</th>
+          <th>Teléfono</th>
+          <th>Dirección</th>
+        </tr>
+      </thead>
+      <tbody id="tablaPacientes">
+        <!-- Pacientes aquí -->
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    © 2025 Centro Médico ISEDA — Todos los derechos reservados.
+  </footer>
+
+  <script>
+    const pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
+    const tabla = document.getElementById("tablaPacientes");
+
+    pacientes.forEach(p => {
+      const fila = `
+        <tr>
+          <td>${p.nombre}</td>
+          <td>${p.dni}</td>
+          <td>${p.telefono}</td>
+          <td>${p.direccion}</td>
+        </tr>
+      `;
+      tabla.innerHTML += fila;
+    });
+  </script>
+</body>
+</html>

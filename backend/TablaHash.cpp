@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <fstream>
 #include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -39,49 +40,42 @@ void cargarDesdeArchivo(const string& nombreArchivo) {
     cout << "Datos cargados desde archivo correctamente.\n";
 }
 
-void buscarPorID(int id) {
-    if (tablaHashPorID.find(id) != tablaHashPorID.end()) {
-        Paciente p = tablaHashPorID[id];
-        cout << "Paciente encontrado: " << p.nombre << ", Edad: " << p.edad << ", Diagnóstico: " << p.diagnostico << endl;
-    } else {
-        cout << "Paciente con ID " << id << " no encontrado.\n";
-    }
+void registrarPaciente(const Paciente& p) {
+    tablaHashPorID[p.id] = p;
+    tablaHashPorNombre[p.nombre] = p;
+    cout << "Paciente " << p.nombre << " registrado correctamente.\n";
 }
 
-void buscarPorNombre(const string& nombre) {
-    if (tablaHashPorNombre.find(nombre) != tablaHashPorNombre.end()) {
-        Paciente p = tablaHashPorNombre[nombre];
-        cout << "Paciente encontrado: ID " << p.id << ", Edad: " << p.edad << ", Diagnóstico: " << p.diagnostico << endl;
-    } else {
-        cout << "Paciente con nombre '" << nombre << "' no encontrado.\n";
+void exportarJSON(const string& nombreArchivo) {
+    ofstream archivo(nombreArchivo);
+    archivo << "[\n";
+    bool primero = true;
+
+    for (const auto& par : tablaHashPorID) {
+        const Paciente& p = par.second;
+        if (!primero) archivo << ",\n";
+        archivo << "  {\n";
+        archivo << "    \"nombre\": \"" << p.nombre << "\",\n";
+        archivo << "    \"dni\": " << p.id << ",\n";
+        archivo << "    \"telefono\": \"Desconocido\",\n";
+        archivo << "    \"direccion\": \"Desconocida\"\n";
+        archivo << "  }";
+        primero = false;
     }
+
+    archivo << "\n]";
+    archivo.close();
+    cout << "Exportado a JSON correctamente.\n";
 }
 
 int main() {
     cargarDesdeArchivo("pacientes.csv");
 
-    int opcion;
-    while (true) {
-        cout << "\n1. Buscar por ID\n2. Buscar por Nombre\n3. Salir\nOpción: ";
-        cin >> opcion;
+    // Ejemplo de cómo registrar un nuevo paciente
+    Paciente nuevoPaciente = {12345, "Juan Pérez", 45, "Hipertensión"};
+    registrarPaciente(nuevoPaciente);
 
-        if (opcion == 1) {
-            int id;
-            cout << "Ingrese el ID del paciente: ";
-            cin >> id;
-            buscarPorID(id);
-        } else if (opcion == 2) {
-            string nombre;
-            cout << "Ingrese el nombre del paciente: ";
-            cin.ignore();
-            getline(cin, nombre);
-            buscarPorNombre(nombre);
-        } else if (opcion == 3) {
-            break;
-        } else {
-            cout << "Opción inválida.\n";
-        }
-    }
+    exportarJSON("pacientes.json");
 
     return 0;
 }

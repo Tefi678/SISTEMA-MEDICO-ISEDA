@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <title>Perfil del Paciente</title>
+  <style>
+    .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 24px;
+  color: #004d40;
+  padding: 15px 30px;
+  background-color: #d7f5f7;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo i {
+  color: #004d40;
+  font-size: 22px;
+}
+
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  background-color: #d7f5f7;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.search-section input {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  background-color: #ffffff;
+  color: #004d40;
+  width: 200px;
+}
+
+.search-section i {
+  font-size: 18px;
+  color: #004d40;
+}
+
+/* Icono de perfil */
+.search-section::after {
+  content: "\f2bd";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-left: auto;
+  font-size: 20px;
+  color: #004d40;
+  background-color: #cce5e2;
+  border-radius: 50%;
+  padding: 10px;
+}
+    body {
+      background: linear-gradient(to bottom, #1D837F, #9FD8E1);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      max-width: 700px;
+      background: white;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      background-color: #d7f5f7;
+      color: #004d40;
+      font-weight: bold;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3 class="text-center text-success mb-4">Perfil del Paciente</h3>
+
+    <div id="infoPaciente" class="mb-4">
+      <!-- Aquí se mostrará info del paciente -->
+    </div>
+
+    <h5>Historial Médico</h5>
+    <ul id="historialLista" class="list-group">
+      <!-- Aquí se mostrará el historial -->
+    </ul>
+  </div>
+
+  <footer>
+    © 2025 Centro Médico ISEDA — Todos los derechos reservados.
+  </footer>
+
+  <script>
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    const dni = getQueryParam("dni");
+    const pacientes = JSON.parse(localStorage.getItem("pacientes")) || [];
+    const historialData = JSON.parse(localStorage.getItem("historiales")) || {};
+
+    const paciente = pacientes.find(p => p.dni === dni);
+    const historial = historialData[dni] || [];
+
+    const infoDiv = document.getElementById("infoPaciente");
+    const lista = document.getElementById("historialLista");
+
+    if (paciente) {
+      infoDiv.innerHTML = `
+        <p><strong>Nombre:</strong> ${paciente.nombre}</p>
+        <p><strong>DNI:</strong> ${paciente.dni}</p>
+        <p><strong>Teléfono:</strong> ${paciente.telefono}</p>
+        <p><strong>Dirección:</strong> ${paciente.direccion}</p>
+      `;
+    } else {
+      infoDiv.innerHTML = `<p class="text-danger">Paciente no encontrado.</p>`;
+    }
+
+    if (historial.length > 0) {
+      historial.forEach(entry => {
+        const item = document.createElement("li");
+        item.className = "list-group-item";
+        item.innerHTML = `<strong>${entry.fecha}</strong>: ${entry.diagnostico} — <em>${entry.tratamiento}</em>`;
+        lista.appendChild(item);
+      });
+    } else {
+      lista.innerHTML = `<li class="list-group-item text-muted">Sin historial registrado.</li>`;
+    }
+  </script>
+</body>
+</html>

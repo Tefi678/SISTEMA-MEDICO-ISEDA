@@ -7,6 +7,59 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <title>Registrar Turno</title>
   <style>
+    .logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 24px;
+  color: #004d40;
+  padding: 15px 30px;
+  background-color: #d7f5f7;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo i {
+  color: #004d40;
+  font-size: 22px;
+}
+
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  background-color: #d7f5f7;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.search-section input {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  background-color: #ffffff;
+  color: #004d40;
+  width: 200px;
+}
+
+.search-section i {
+  font-size: 18px;
+  color: #004d40;
+}
+
+/* Icono de perfil */
+.search-section::after {
+  content: "\f2bd";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  margin-left: auto;
+  font-size: 20px;
+  color: #004d40;
+  background-color: #cce5e2;
+  border-radius: 50%;
+  padding: 10px;
+}
     body {
       margin: 0;
       background: linear-gradient(to bottom, #1D837F, #9FD8E1);
@@ -94,7 +147,6 @@
 </head>
 <body>
 
-  <!-- Header -->
   <header class="header">
     <div class="logo">
       <img src="../images/logo.png" alt="Logo Centro Médico" height="50">
@@ -155,7 +207,7 @@
     btnNuevo.addEventListener('click', () => {
       pacienteNuevo = true;
       formNombre.classList.add('hidden');
-      window.location.href = "registerpatient.html";
+      window.location.href = "../backend/registerpatient.html";
     });
 
     btnExistente.addEventListener('click', () => {

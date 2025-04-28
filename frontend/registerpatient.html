@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <title>Registrar Paciente</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #1D837F, #9FD8E1);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .container {
+      max-width: 500px;
+      background: white;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    footer {
+      text-align: center;
+      background-color: #d7f5f7;
+      color: #004d40;
+      font-weight: bold;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3 class="text-center text-success mb-4">Registrar Paciente</h3>
+
+    <form id="pacienteForm" action="registrar.php" method="POST">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" class="form-control" name="nombre" required>
+      </div>
+      <div class="form-group">
+        <label>Apellido</label>
+        <input type="text" class="form-control" name="apellido" required>
+      </div>
+      <div class="form-group">
+        <label>Fecha de Nacimiento</label>
+        <input type="date" class="form-control" name="fecha_nacimiento" required>
+      </div>
+      <div class="form-group">
+        <label>Edad</label>
+        <input type="number" class="form-control" name="edad" required>
+      </div>
+      <div class="form-group">
+        <label>Diagnóstico</label>
+        <input type="text" class="form-control" name="diagnostico">
+      </div>
+      <div class="form-group">
+        <label>Género</label>
+        <select class="form-control" name="genero" required>
+          <option value="">Seleccione</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Dirección</label>
+        <input type="text" class="form-control" name="direccion">
+      </div>
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input type="text" class="form-control" name="telefono" required>
+      </div>
+      <button type="submit" class="btn btn-success btn-block">Guardar</button>
+    </form>
+    
+    
+  </div>
+
+  <footer>
+    © 2025 Centro Médico ISEDA — Todos los derechos reservados.
+  </footer>
+
+  <script>
+    document.getElementById("pacienteForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+  
+      const paciente = {
+        nombre: document.getElementById("nombre").value,
+        dni: document.getElementById("id_paciente").value,
+        telefono: document.getElementById("telefono").value,
+        direccion: document.getElementById("direccion").value
+      };
+  
+      let pacientes = JSON.parse(localStorage.getItem("paciente")) || [];
+      pacientes.push(paciente);
+      localStorage.setItem("paciente", JSON.stringify(pacientes));
+  
+      alert("Paciente registrado correctamente.");
+      window.location.href = "registerpatient.html";
+    });
+  </script>
+</body>
+</html>

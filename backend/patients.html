@@ -5,142 +5,163 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
   <title>Pacientes Registrados</title>
+  <link rel="stylesheet" href="../frontend/style.css"/>
   <style>
-    .logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: bold;
-  font-size: 24px;
-  color: #004d40;
-  padding: 15px 30px;
-  background-color: #d7f5f7;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.logo i {
-  color: #004d40;
-  font-size: 22px;
-}
-
-.search-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 15px 30px;
-  background-color: #d7f5f7;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.search-section input {
-  padding: 8px 14px;
-  border: none;
-  border-radius: 20px;
-  outline: none;
-  background-color: #ffffff;
-  color: #004d40;
-  width: 200px;
-}
-
-.search-section i {
-  font-size: 18px;
-  color: #004d40;
-}
-
-/* Icono de perfil */
-.search-section::after {
-  content: "\f2bd";
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-  margin-left: auto;
-  font-size: 20px;
-  color: #004d40;
-  background-color: #cce5e2;
-  border-radius: 50%;
-  padding: 10px;
-}
-    body {
-      background: linear-gradient(to bottom, #1D837F, #9FD8E1);
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 30px;
-    }
     .container {
+      min-height: calc(25vh - 30px);
+    }
+    .page-container {
       background-color: white;
       border-radius: 10px;
       padding: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
+
     h3 {
       color: #1D837F;
     }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .search-bar input {
+      width: 300px;
+      padding: 8px 12px;
+      border: 2px solid #1D837F;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    .search-bar button {
+      margin-left: 10px;
+      padding: 8px 12px;
+      border: 2px solid #1D837F;
+      background-color: #1D837F;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .search-bar button:hover {
+      background-color: #156f5b;
+    }
+
     table {
       margin-top: 20px;
     }
-    footer {
-      margin-top: 30px;
+
+    th, td {
       text-align: center;
+      vertical-align: middle !important;
+    }
+
+    .thead-light th {
       background-color: #d7f5f7;
       color: #004d40;
       font-weight: bold;
-      padding: 15px;
     }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .new-patient-btn {
+  background-color: #1D837F;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.new-patient-btn:hover {
+  background-color: #156f5b;
+}
+
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="logo">
-      <img src="../images/logo.png" alt="Logo Centro Médico" height="50">
-      <span>CENTRO MÉDICO ISEDA</span>
-    </div>
-    <div class="search-section">
-      <input type="text" placeholder="Buscar...">
-      <i class="fa fa-search"></i>
-      <i class="fa-solid fa-user-circle profile-icon"></i>
-    </div>
+  <header class="logo">
+    <img src="../images/logo.png" alt="Logo Centro Médico" height="50">
+    <span>CENTRO MÉDICO ISEDA</span>
   </header>
+  <h1 class="text-center">Lista de Pacientes</h1>
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="Buscar paciente...">
+    <button>Buscar</button>
+    <button class="new-patient-btn">Nuevo Paciente</button>
+  </div>
   <div class="container">
-    <h3 class="text-center">Lista de Pacientes</h3>
     <table class="table table-bordered table-hover mt-4">
       <thead class="thead-light">
         <tr>
           <th>Nombre</th>
-          <th>DNI</th>
-          <th>Teléfono</th>
+          <th>Apellido</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Edad</th>
+          <th>Diagnóstico</th>
+          <th>Género</th>
           <th>Dirección</th>
+          <th>Teléfono</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id="tablaPacientes">
-        <!-- Pacientes aquí -->
+      <tbody>
+
       </tbody>
     </table>
   </div>
-
   <footer>
-    © 2025 Centro Médico ISEDA — Todos los derechos reservados.
+    <h3>ISEDA</h3>
+    <p>2025</p>
   </footer>
-
   <script>
-    // Usando fetch para cargar pacientes desde pacientes.json
-    fetch('pacientes.json')
-      .then(response => response.json())
-      .then(pacientes => {
-        const tabla = document.getElementById("tablaPacientes");
-
-        pacientes.forEach(p => {
-          const fila = `
-            <tr>
-              <td>${p.nombre}</td>
-              <td>${p.dni}</td>
-              <td>${p.telefono}</td>
-              <td>${p.direccion}</td>
-              <td><a href="patient-profile.html?dni=${p.dni}" class="btn btn-sm btn-info">Ver perfil</a></td>
-            </tr>
-          `;
-          tabla.innerHTML += fila;
+    document.addEventListener('DOMContentLoaded', function () {
+      fetch('pacientes.csv')  // Ajusta el path si es necesario
+        .then(response => response.text())
+        .then(data => {
+          const filas = data.trim().split('\n');
+          const tbody = document.querySelector('tbody');
+    
+          filas.forEach(fila => {
+            const columnas = fila.split(',');
+    
+            const tr = document.createElement('tr');
+    
+            tr.innerHTML = `
+              <td>${columnas[1]}</td> <!-- Nombre -->
+              <td>${columnas[2]}</td> <!-- Apellido -->
+              <td>${columnas[3]}</td> <!-- Fecha de Nacimiento -->
+              <td>${columnas[4]}</td> <!-- Edad -->
+              <td>${columnas[5]}</td> <!-- Diagnóstico -->
+              <td>${columnas[6]}</td> <!-- Género -->
+              <td>${columnas[7]}</td> <!-- Dirección -->
+              <td>${columnas[8]}</td> <!-- Teléfono -->
+              <td>
+                <button class="btn btn-warning btn-sm">Editar</button>
+                <button class="btn btn-danger btn-sm">Eliminar</button>
+              </td>
+            `;
+    
+            tbody.appendChild(tr);
+          });
+        })
+        .catch(error => {
+          console.error('Error al cargar pacientes:', error);
         });
-      })
-      .catch(error => console.error('Error al cargar pacientes:', error));
-  </script>  
+    });
+    </script>
+    
 </body>
-</html>
+</html

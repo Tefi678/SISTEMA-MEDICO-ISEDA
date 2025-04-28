@@ -26,6 +26,7 @@
       justify-content: center;
       align-items: center;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
 
     .search-bar input {
@@ -44,14 +45,20 @@
       color: white;
       border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.3s;
     }
 
     .search-bar button:hover {
       background-color: #156f5b;
     }
 
-    table {
+    .table-responsive {
       margin-top: 20px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 800px;
     }
 
     th, td {
@@ -65,30 +72,41 @@
       font-weight: bold;
     }
 
+    .action-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .edit-btn {
+      background-color: #ffca28;
+      color: #004d40;
+    }
+
+    .edit-btn:hover {
+      background-color: #ffc107;
+    }
+
+    .delete-btn {
+      background-color: #e57373;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #ef5350;
+    }
+
     footer {
-      position: absolute;
+      position: relative;
       bottom: 0;
       width: 100%;
       text-align: center;
       margin-top: 20px;
     }
-    .new-patient-btn {
-  background-color: #1D837F;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin-top: 10px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.new-patient-btn:hover {
-  background-color: #156f5b;
-}
-
   </style>
 </head>
 <body>
@@ -96,72 +114,111 @@
     <img src="../images/logo.png" alt="Logo Centro Médico" height="50">
     <span>CENTRO MÉDICO ISEDA</span>
   </header>
-  <h1 class="text-center">Lista de Pacientes</h1>
+
+  <h1 class="text-center mt-4">Lista de Pacientes</h1>
+
   <div class="search-bar">
     <input type="text" id="searchInput" placeholder="Buscar paciente...">
-    <button>Buscar</button>
-    <button class="new-patient-btn">Nuevo Paciente</button>
+    <button id="searchBtn">Buscar</button>
+    <button class="new-patient-btn" id="newPatientBtn">Nuevo Paciente</button>
   </div>
-  <div class="container">
-    <table class="table table-bordered table-hover mt-4">
-      <thead class="thead-light">
-        <tr>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Fecha de Nacimiento</th>
-          <th>Edad</th>
-          <th>Diagnóstico</th>
-          <th>Género</th>
-          <th>Dirección</th>
-          <th>Teléfono</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
 
-      </tbody>
-    </table>
+  <div class="container">
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Edad</th>
+            <th>Diagnóstico</th>
+            <th>Género</th>
+            <th>Dirección</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="patientsTableBody">
+        </tbody>
+      </table>
+    </div>
   </div>
+
   <footer>
     <h3>ISEDA</h3>
     <p>2025</p>
   </footer>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      fetch('pacientes.csv')  // Ajusta el path si es necesario
+      const tbody = document.getElementById('patientsTableBody');
+      const searchInput = document.getElementById('searchInput');
+
+      fetch('pacientes.csv')
         .then(response => response.text())
         .then(data => {
           const filas = data.trim().split('\n');
-          const tbody = document.querySelector('tbody');
-    
+
           filas.forEach(fila => {
             const columnas = fila.split(',');
-    
+
             const tr = document.createElement('tr');
-    
+
             tr.innerHTML = `
-              <td>${columnas[1]}</td> <!-- Nombre -->
-              <td>${columnas[2]}</td> <!-- Apellido -->
-              <td>${columnas[3]}</td> <!-- Fecha de Nacimiento -->
-              <td>${columnas[4]}</td> <!-- Edad -->
-              <td>${columnas[5]}</td> <!-- Diagnóstico -->
-              <td>${columnas[6]}</td> <!-- Género -->
-              <td>${columnas[7]}</td> <!-- Dirección -->
-              <td>${columnas[8]}</td> <!-- Teléfono -->
+              <td>${columnas[1]}</td>
+              <td>${columnas[2]}</td>
+              <td>${columnas[3]}</td>
+              <td>${columnas[4]}</td>
+              <td>${columnas[5]}</td>
+              <td>${columnas[6]}</td>
+              <td>${columnas[7]}</td>
+              <td>${columnas[8]}</td>
               <td>
-                <button class="btn btn-warning btn-sm">Editar</button>
-                <button class="btn btn-danger btn-sm">Eliminar</button>
+                <button class="action-btn edit-btn">Editar</button>
+                <button class="action-btn delete-btn">Eliminar</button>
               </td>
             `;
-    
+
             tbody.appendChild(tr);
           });
+
+          // Botón editar
+          document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+              window.location.href = 'patient-profile.html';
+            });
+          });
+
+          // Botón eliminar
+          document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const row = e.target.closest('tr');
+              row.remove();
+            });
+          });
+
         })
         .catch(error => {
           console.error('Error al cargar pacientes:', error);
         });
+
+      // Buscar paciente
+      document.getElementById('searchBtn').addEventListener('click', function() {
+        const query = searchInput.value.toLowerCase();
+        const rows = document.querySelectorAll('#patientsTableBody tr');
+
+        rows.forEach(row => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(query) ? '' : 'none';
+        });
+      });
+
+      // Botón nuevo paciente
+      document.getElementById('newPatientBtn').addEventListener('click', function() {
+        window.location.href = 'registerpatient.html';
+      });
     });
-    </script>
-    
+  </script>
 </body>
-</html
+</html>

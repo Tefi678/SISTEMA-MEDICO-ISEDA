@@ -23,14 +23,6 @@ body, html {
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: calc(100vh - 120px);
-  padding: 30px;
-}
-
 .main-content {
   display: flex;
   gap: 50px;

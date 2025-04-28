@@ -1,8 +1,8 @@
 #include <iostream>
 #include <unordered_map>
-#include <fstream>
-#include <sstream>
 #include <string>
+#include <cstdlib> // Para getenv
+#include <sstream>
 
 using namespace std;
 
@@ -21,34 +21,10 @@ struct Paciente {
 unordered_map<int, Paciente> tablaHashPorID;
 unordered_map<string, Paciente> tablaHashPorNombre;
 
-void cargarDesdeArchivo(const string& nombreArchivo) {
-    ifstream archivo(nombreArchivo);
-    string linea;
-
-    while (getline(archivo, linea)) {
-        stringstream ss(linea);
-        string item;
-        Paciente p;
-
-        // Suponiendo que el CSV tiene los campos en el mismo orden que tu tabla:
-        getline(ss, item, ',');
-        p.id = stoi(item);
-        getline(ss, p.nombre, ',');
-        getline(ss, p.apellido, ',');
-        getline(ss, p.fechaNacimiento, ',');
-        getline(ss, item, ',');
-        p.edad = stoi(item);
-        getline(ss, p.diagnostico, ',');
-        getline(ss, p.genero, ',');
-        getline(ss, p.direccion, ',');
-        getline(ss, p.telefono, ',');
-
-        tablaHashPorID[p.id] = p;
-        tablaHashPorNombre[p.nombre] = p;
-    }
-
-    archivo.close();
-    cout << "Datos cargados desde archivo correctamente.\n";
+// Función para obtener el valor del campo de entrada HTTP POST
+string obtenerCampoPost(const string& campo) {
+    char* val = getenv(campo.c_str());
+    return (val == nullptr) ? "" : string(val);
 }
 
 void registrarPaciente(const Paciente& p) {
@@ -57,44 +33,41 @@ void registrarPaciente(const Paciente& p) {
     cout << "Paciente " << p.nombre << " " << p.apellido << " registrado correctamente.\n";
 }
 
-void exportarJSON(const string& nombreArchivo) {
-    ofstream archivo(nombreArchivo);
-    archivo << "[\n";
-    bool primero = true;
+void responderFormulario() {
+    // Contenido de la cabecera HTTP
+    cout << "Content-type: text/html\n\n";
+    cout << "<html><body>";
 
-    for (const auto& par : tablaHashPorID) {
-        const Paciente& p = par.second;
-        if (!primero) archivo << ",\n";
-        archivo << "  {\n";
-        archivo << "    \"id\": " << p.id << ",\n";
-        archivo << "    \"nombre\": \"" << p.nombre << "\",\n";
-        archivo << "    \"apellido\": \"" << p.apellido << "\",\n";
-        archivo << "    \"fechaNacimiento\": \"" << p.fechaNacimiento << "\",\n";
-        archivo << "    \"edad\": " << p.edad << ",\n";
-        archivo << "    \"diagnostico\": \"" << p.diagnostico << "\",\n";
-        archivo << "    \"genero\": \"" << p.genero << "\",\n";
-        archivo << "    \"direccion\": \"" << p.direccion << "\",\n";
-        archivo << "    \"telefono\": \"" << p.telefono << "\"\n";
-        archivo << "  }";
-        primero = false;
+    // Obtener los datos del formulario a través de las variables de entorno
+    string id_str = obtenerCampoPost("id");
+    string nombre = obtenerCampoPost("nombre");
+    string apellido = obtenerCampoPost("apellido");
+    string fechaNacimiento = obtenerCampoPost("fecha_nacimiento");
+    string edad_str = obtenerCampoPost("edad");
+    string diagnostico = obtenerCampoPost("diagnostico");
+    string genero = obtenerCampoPost("genero");
+    string direccion = obtenerCampoPost("direccion");
+    string telefono = obtenerCampoPost("telefono");
+
+    if (id_str.empty() || nombre.empty() || apellido.empty() || edad_str.empty() || telefono.empty()) {
+        cout << "<h1>Error: Faltan campos obligatorios.</h1>";
+    } else {
+        // Crear un nuevo paciente a partir de los datos recibidos
+        int id = stoi(id_str);
+        int edad = stoi(edad_str);
+        
+        Paciente nuevoPaciente = { id, nombre, apellido, fechaNacimiento, edad, diagnostico, genero, direccion, telefono };
+        registrarPaciente(nuevoPaciente);
+
+        // Responder con un mensaje de éxito
+        cout << "<h1>Paciente registrado correctamente.</h1>";
     }
 
-    archivo << "\n]";
-    archivo.close();
-    cout << "Exportado a JSON correctamente.\n";
+    cout << "</body></html>";
 }
 
 int main() {
-    cargarDesdeArchivo("pacientes.csv");
-
-    // Ejemplo de cómo registrar un nuevo paciente
-    Paciente nuevoPaciente = {
-        12345, "Juan", "Pérez", "1979-05-20", 45,
-        "Hipertensión", "Masculino", "Calle Falsa 123", "123456789"
-    };
-    registrarPaciente(nuevoPaciente);
-
-    exportarJSON("pacientes.json");
-
+    // Responder al formulario CGI
+    responderFormulario();
     return 0;
 }

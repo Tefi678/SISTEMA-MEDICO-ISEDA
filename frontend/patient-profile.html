@@ -135,6 +135,12 @@
     } else {
       lista.innerHTML = `<li class="list-group-item text-muted">Sin historial registrado.</li>`;
     }
+    fetch('/eliminarPaciente', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({ id: pacienteID })
+})
+
   </script>
 </body>
 </html>

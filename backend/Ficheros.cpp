@@ -1,57 +1,65 @@
 #include <iostream>
+#include <vector>
 #include <string>
+
 using namespace std;
-struct Nodo {
-    string nombre;
-    Nodo* izquierda;
-    Nodo* derecha;
-    Nodo(string n) {
-        nombre = n;
-        izquierda = nullptr;
-        derecha = nullptr;
-    }
-};
 
-class ArbolBinario {
+// --- Clase Paciente ---
+class Paciente {
 private:
-    Nodo* raiz;
-    void insertar(Nodo*& nodo, string nombre) {
-        if (nodo == nullptr) {
-            nodo = new Nodo(nombre);
-        } else if (nombre < nodo->nombre) {
-            insertar(nodo->izquierda, nombre);
-        } else {
-            insertar(nodo->derecha, nombre);
-        }
-    }
-    void inorden(Nodo* nodo) {
-        if (nodo != nullptr) {
-            inorden(nodo->izquierda);
-            cout << nodo->nombre << endl;
-            inorden(nodo->derecha);
-        }
-    }
+    int id;
+    string nombre;
+    string apellido;
+
 public:
-    ArbolBinario() {
-        raiz = nullptr;
-    }
-    void insertar(string nombre) {
-        insertar(raiz, nombre);
-    }
-    void mostrarInorden() {
-        cout << "Pacientes (ordenados):" << endl;
-        inorden(raiz);
+    Paciente(int id, const string& nombre, const string& apellido)
+        : id(id), nombre(nombre), apellido(apellido) {}
+
+    int getId() const { return id; }
+    string getNombre() const { return nombre; }
+    string getApellido() const { return apellido; }
+
+    void mostrarDatos() const {
+        cout << "ID: " << id << endl;
+        cout << "Nombre: " << nombre << " " << apellido << endl;
     }
 };
 
+// --- Estructura para entradas del historial ---
+struct EntradaHistorial {
+    string fecha;
+    string descripcion;
+};
+
+// --- Clase Historial ---
+class Historial {
+private:
+    vector<EntradaHistorial> entradas;
+
+public:
+    void agregarEntrada(const string& fecha, const string& descripcion) {
+        entradas.push_back({fecha, descripcion});
+    }
+
+    void mostrarHistorial() const {
+        cout << "\nHistorial Médico:\n";
+        for (const auto& entrada : entradas) {
+            cout << "- [" << entrada.fecha << "] " << entrada.descripcion << endl;
+        }
+    }
+};
+
+// --- Programa principal ---
 int main() {
-    ArbolBinario arbol;
-    arbol.insertar("Juan Pérez");
-    arbol.insertar("Ana Martínez");
-    arbol.insertar("Carlos Ramírez");
-    arbol.insertar("Beatriz Gómez");
-    arbol.insertar("Zulema Torres");
-    arbol.mostrarInorden();
+    Paciente paciente1(1, "Juan", "Pérez");
+    Historial historial1;
+
+    paciente1.mostrarDatos();
+
+    historial1.agregarEntrada("2025-04-28", "Consulta general. Todo en orden.");
+    historial1.agregarEntrada("2025-05-15", "Diagnóstico de hipertensión. Medicación recetada.");
+
+    historial1.mostrarHistorial();
 
     return 0;
 }
